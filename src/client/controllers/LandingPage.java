@@ -71,12 +71,14 @@ public class LandingPage implements ActionListener{
         panel.add(studentBtn);
         panel.add(teacherBtn);
         frame.add(panel);
+
+        frame.setVisible(true);
     
     }
     public JFrame getFrame() {
         return this.frame;
     }
-    public  void actionPerformed(ActionEvent ae){
+    public void actionPerformed(ActionEvent ae){
         
     }
 }

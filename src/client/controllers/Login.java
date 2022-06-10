@@ -17,11 +17,12 @@ import javax.swing.*;
 
 import shared.classes.*;
 import shared.remoteInterface.authenticationInterface;
-public class Login  implements ActionListener{
+public class Login implements ActionListener{
 
     private Registry registry;
     private authenticationInterface authenticationStub;
     private JPanel panel;
+    private JLabel label;
     private String type;
     
     //2. Login Componenet
@@ -43,6 +44,9 @@ public class Login  implements ActionListener{
         
         panel = new JPanel();
         panel.setLayout(null);
+
+        label = new JLabel("Selamu");
+        label.setBounds(10, 10, 100, 20);
         
         
         userNameLbl = new JLabel("User Name");
@@ -51,7 +55,6 @@ public class Login  implements ActionListener{
         passwordTxt = new JPasswordField(26);
         LoginBtn = new JButton("Login");
 
-        
         userNameLbl.setBounds(400, 200, 90, 30);
         userNameTxt.setBounds(500, 200, 120, 30);
         passwordLbl.setBounds(400, 240, 90, 30);
@@ -76,7 +79,11 @@ public class Login  implements ActionListener{
             String username = userNameTxt.getText();
             if(authenticationStub.login(username, password, "admin")){
                 System.out.println("Admin is logged");
-                
+                AdminPage admin = new AdminPage();
+                this.panel.setVisible(false);
+    
+                this.panel.getParent().add(admin.getPanel());
+                this.panel.getParent().add(admin.getHeader());
             }
             else{
                 System.out.println("Admin username or password is incorrect");
@@ -114,6 +121,7 @@ public class Login  implements ActionListener{
         }
        
     }
+    @Override
     public void actionPerformed(ActionEvent e){
 
         if(e.getSource()==LoginBtn){
