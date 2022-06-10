@@ -11,8 +11,7 @@ import server.database.DbConnection;
 
 public class implementAuthentication  implements authenticationInterface {
 	Connection con;
-	ArrayList<Course>courses = new ArrayList<Course>();
-
+	
 	public implementAuthentication(){
 		try {	
 			UnicastRemoteObject.exportObject(this, 0);
@@ -26,25 +25,21 @@ public class implementAuthentication  implements authenticationInterface {
 	@Override
 	public boolean login(String userName, String password, String type) {
 		boolean islogged = false;
-		// System.out.println(course.getCourseId());
-		// System.out.println(course.getCourseName());
-		// System.out.println(course.getCreaditHour());
-		// System.out.println(course.getSectiond());
         String query = "";
         if(type.equals("admin")){
-            query = "select * from admin where user_name = ? and password = ? ";
+            query = "select * from admin where user_name = ? and pass_word = ? ";
         }
         else if(type.equals("teacher")){
-            query = "select * from teacher where user_name = ? and password = ? ";
+            query = "select * from teacher where user_name = ? and pass_word = ? ";
         }
         else if(type.equals("student")){
-            query = "select * from student where user_name = ? and password = ? ";
+            query = "select * from student where user_name = ? and pass_word = ? ";
         }
 		try{
 			PreparedStatement stmt=con.prepareStatement(query);  
-            
 			stmt.setString(1, userName);
             stmt.setString(2, password);
+			System.out.println(stmt);
             ResultSet rs = stmt.executeQuery();
             islogged = rs.next();
             System.out.println(rs.getString("user_name"));
