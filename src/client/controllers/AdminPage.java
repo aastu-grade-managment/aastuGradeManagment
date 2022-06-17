@@ -21,6 +21,7 @@ public class AdminPage  implements ActionListener{
     private JButton addDepBtn;
     private JButton addSecBtn;
     private JButton addCouBtn;
+    private JButton addTeaBtn;
     private JButton addStuBtn;
 
     AdminAction action;
@@ -39,15 +40,19 @@ public class AdminPage  implements ActionListener{
         addDepBtn = new JButton("Add Department");
         addSecBtn = new JButton("Add Section");
         addCouBtn = new JButton("Add Course");
+        addTeaBtn = new JButton("Add Teacher");
         addStuBtn = new JButton("Add Student");
         
         addDepBtn.setBounds(20, 100, 120, 30);
         addSecBtn.setBounds(20, 140, 120, 30);
         addCouBtn.setBounds(20, 190, 120, 30);
-        addStuBtn.setBounds(20, 250, 120, 30);        
+        addTeaBtn.setBounds(20, 250, 120, 30);  
+        addStuBtn.setBounds(20, 300, 120, 30);   
+
         addDepBtn.addActionListener(this);
         addSecBtn.addActionListener(this);
         addCouBtn.addActionListener(this);
+        addTeaBtn.addActionListener(this);
         addStuBtn.addActionListener(this);
         
         
@@ -55,6 +60,7 @@ public class AdminPage  implements ActionListener{
         panel.add(addSecBtn);
         panel.add(addCouBtn);
         panel.add(addStuBtn);
+        panel.add(addTeaBtn);
         
     }
     public  void actionPerformed(ActionEvent ae){
@@ -90,6 +96,16 @@ public class AdminPage  implements ActionListener{
             con.add(pan);
             con.add(panel);
             pan.setVisible(true);
+        }
+        else if(ae.getSource() == addTeaBtn){
+            Container con = panel.getParent();
+            con.removeAll();
+            JPanel pan = action.getAddTeacherPanel();
+            pan.setVisible(false);
+            con.add(pan);
+            con.add(panel);
+            pan.setVisible(true);
+            
         }
         else if(ae.getSource() == addStuBtn){
             Container con = panel.getParent();

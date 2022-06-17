@@ -6,9 +6,9 @@ public class Department implements Serializable{
     private String departmentId;
     private String departmentName;
     private ArrayList<Section>sections = new ArrayList<Section>();
-    public Department(String depName, String id){
-        this.departmentName = depName;
+    public Department( String id, String depName){
         this.departmentId = id;
+        this.departmentName = depName;
     }
     public String getDepartmentId(){
         return this.departmentId;
