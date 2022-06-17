@@ -60,41 +60,44 @@ public class AdminPage  implements ActionListener{
     public  void actionPerformed(ActionEvent ae){
          if(ae.getSource() == addDepBtn){
            // Border br = BorderFactory.createLineBorder(Color.black);
-            action.getAddStudentPanel().setVisible(false);
-            action.getAddSectionPanel().setVisible(false);
-            action.getAddCoursePanel().setVisible(false);
+            // action.getAddStudentPanel().setVisible(false);
+            // action.getAddSectionPanel().setVisible(false);
+            // action.getAddCoursePanel().setVisible(false);
+            Container con = panel.getParent();
+            con.removeAll();
             JPanel pan = action.getAddDepartmentPanel();
             pan.setVisible(false);
-            this.panel.getParent().add(pan);
+            con.add(pan);
+            con.add(panel);
             pan.setVisible(true);
 
          }
          else if(ae.getSource() == addSecBtn){
-            action.getAddDepartmentPanel().setVisible(false);
-            action.getAddStudentPanel().setVisible(false);
-            action.getAddCoursePanel().setVisible(false);
+            Container con = panel.getParent();
+            con.removeAll();
             JPanel pan = action.getAddSectionPanel();
             pan.setVisible(false);
-            this.panel.getParent().add(pan);
+            con.add(pan);
+            con.add(panel);
             pan.setVisible(true);
         }
         else if(ae.getSource() == addCouBtn){
            
-            action.getAddDepartmentPanel().setVisible(false);
-            action.getAddSectionPanel().setVisible(false);
-            action.getAddStudentPanel().setVisible(false);
+            Container con = panel.getParent();
+            con.removeAll();
             JPanel pan = action.getAddCoursePanel();
             pan.setVisible(false);
-            this.panel.getParent().add(pan);
+            con.add(pan);
+            con.add(panel);
             pan.setVisible(true);
         }
         else if(ae.getSource() == addStuBtn){
-            action.getAddDepartmentPanel().setVisible(false);
-            action.getAddSectionPanel().setVisible(false);
-            action.getAddCoursePanel().setVisible(false);
+            Container con = panel.getParent();
+            con.removeAll();
             JPanel pan = action.getAddStudentPanel();
             pan.setVisible(false);
-            this.panel.getParent().add(pan);
+            con.add(pan);
+            con.add(panel);
             pan.setVisible(true);
             
         }

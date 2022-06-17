@@ -81,7 +81,6 @@ public class Login implements ActionListener{
                 System.out.println("Admin is logged");
                 AdminPage admin = new AdminPage();
                 this.panel.setVisible(false);
-    
                 this.panel.getParent().add(admin.getPanel());
                 this.panel.getParent().add(admin.getHeader());
             }

@@ -146,8 +146,8 @@ public class AdminAction  implements ActionListener{
         addCourseBtn = new JButton("Add");
         addCourseBtn.addActionListener(this);
         courseFinish.addActionListener(this);
-        addCourseBtn.setBounds(200, 200, 80, 80);
-        courseFinish.setBounds(290, 200, 80, 80);
+        addCourseBtn.setBounds(200, 200, 80, 40);
+        courseFinish.setBounds(290, 200, 80, 40);
 
         addCoursePanel.add(courseFinish);
         addCoursePanel.add(addCourseBtn);
