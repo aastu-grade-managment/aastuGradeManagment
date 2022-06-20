@@ -6,9 +6,9 @@ public class Course implements Serializable{
     private String courseId;
     private String courseName;
     private int creaditHour;
-    private String sectionId;
+    private String departmentId;
 
-    public Course(String name, String id, int creaditHour){
+    public Course(String id, String name, int creaditHour){
         this.courseId = id;
         this.courseName = name;
         this.creaditHour = creaditHour;
@@ -22,13 +22,13 @@ public class Course implements Serializable{
     public void setCreaditHour(int creaditHour){
         this.creaditHour = creaditHour;
     }
-    public void setSectionId(String sectionId){
-        this.sectionId = sectionId;
+    public void setDepartmentId(String departmentId){
+        this.departmentId = departmentId;
     }
     
-    
-    public String getSectiond(){
-        return this.sectionId;
+
+    public String getDepartmentId(){
+        return this.departmentId;
     }
     public String getCourseName(){
         return this.courseName;

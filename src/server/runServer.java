@@ -4,12 +4,11 @@ import java.rmi.AlreadyBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
-
 import server.implmentRemoteInterface.*;
 
 public class runServer {
 	public static void main(String[] args) throws RemoteException, AlreadyBoundException {
-		//serverImpl server = new serverImpl();
+		
 		implementCourse courseStub = new implementCourse();
 		implementSection sectionStub = new implementSection();
 		implementDepartment departmentStub = new implementDepartment();

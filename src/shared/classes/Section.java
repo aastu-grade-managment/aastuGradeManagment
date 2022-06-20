@@ -14,7 +14,7 @@ public class Section implements Serializable{
     
     
     
-    public Section(String sectionName, String sectionId){
+    public Section(String sectionId,String sectionName ){
         this.sectionId = sectionId;
         this.sectionName = sectionName;
     }

@@ -3,7 +3,6 @@ package shared.remoteInterface;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
-
 import shared.classes.*;
 
 public interface departmentInterface extends Remote{

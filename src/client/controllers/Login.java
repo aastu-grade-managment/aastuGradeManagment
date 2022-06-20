@@ -38,6 +38,7 @@ public class Login implements ActionListener{
         try {
             registry = LocateRegistry.getRegistry("localhost", 2020);
             authenticationStub = (authenticationInterface)registry.lookup("login");
+           
         } catch (Exception e) {
             System.out.println(e);
         }
@@ -83,6 +84,8 @@ public class Login implements ActionListener{
                 this.panel.setVisible(false);
                 this.panel.getParent().add(admin.getPanel());
                 this.panel.getParent().add(admin.getHeader());
+                this.panel.getParent().add(admin.getDisplay());
+                
             }
             else{
                 System.out.println("Admin username or password is incorrect");

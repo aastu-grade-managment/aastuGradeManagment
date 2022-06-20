@@ -29,14 +29,14 @@ public class implementCourse  implements courseInterface {
 		System.out.println(course.getCourseId());
 		System.out.println(course.getCourseName());
 		System.out.println(course.getCreaditHour());
-		System.out.println(course.getSectiond());
+		System.out.println(course.getDepartmentId());
 		try{
-			String query = "insert into course(course_id, course_name,credit_hour, section_id) values(?,?,?,?)";
+			String query = "insert into course(course_id, course_name,credit_hour, department_id) values(?,?,?,?)";
 			PreparedStatement stmt=con.prepareStatement(query);  
 			stmt.setString(1, course.getCourseId());
             stmt.setString(2, course.getCourseName());
             stmt.setInt(3,course.getCreaditHour());
-            stmt.setString(4, course.getSectiond());
+            stmt.setString(4, course.getDepartmentId());
 			row = stmt.executeUpdate();   
 			System.out.println(query);
 		}catch(Exception er){
@@ -57,10 +57,11 @@ public class implementCourse  implements courseInterface {
 				String courseId = rt.getString("course_id");
                 String courseName = rt.getString("course_name");
                 int creditHour = rt.getInt("credit_hour");
-                String sectionId = rt.getString("section_id");
+                String departmentId = rt.getString("department_id");
 				Course cour = new Course(courseId, courseName, creditHour);
-                cour.setSectionId(sectionId);
+                cour.setDepartmentId(departmentId);
 				courses.add(cour);
+				
 			}
 		}catch(Exception er){
 			System.out.println(er);

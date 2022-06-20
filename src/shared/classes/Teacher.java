@@ -6,8 +6,8 @@ public class Teacher implements Serializable{
     private String teacherId;
     private String firstName;
     private String lastName;
-    private String courseId;
     private String email;
+    private String courseId;
     private String sectionId;
 
     public Teacher(String teacherId, String firstName, String lastName, String email){
@@ -16,9 +16,7 @@ public class Teacher implements Serializable{
         this.lastName = lastName;
         this.email = email;
     }
-    public void setcourseId(String courseId){
-        this.courseId = courseId;
-    }
+   
     public void setFirstName(String firstName){
         this.firstName = firstName;
     }

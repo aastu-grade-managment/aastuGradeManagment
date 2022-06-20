@@ -23,6 +23,8 @@ public class implementTeacher  implements teacherInterface {
 	@Override
 	public int addTeacher(Teacher teacher) {
 		int row = 0;
+		System.out.println(teacher.getSectionId());
+		System.out.println(teacher.getCourseId());
 		// System.out.println(section.getAllTeacher().get(0).getFirstName());
 		// System.out.println(section.getAllTeacher().get(0).getLastName());
 		// System.out.println(section.getAllTeacher().get(0).getTeacherId());
@@ -39,7 +41,7 @@ public class implementTeacher  implements teacherInterface {
             stmt.setString(7, teacher.getSectionId());
 			stmt.setString(8, teacher.getCourseId());
 			row = stmt.executeUpdate();   
-			System.out.println(query);
+			
 		}catch(Exception er){
 			System.out.println(er);
 		}

@@ -47,6 +47,7 @@ public class implementDepartment  implements departmentInterface {
 
 	@Override
 	public ArrayList<Department> getDepartment(String query) {
+		System.out.println(query);
 		try{
 			PreparedStatement stmt=con.prepareStatement(query);  
 			ResultSet rt = stmt.executeQuery();

@@ -56,7 +56,7 @@ public class implementSection  implements sectionInterface {
 			while(rt.next()){
 				String id = rt.getString("section_id");
                 String sectionName = rt.getString("section_name");
-                String department = rt.getString("department");
+                String department = rt.getString("department_id");
 				Section sect = new Section(id, sectionName);
                 sect.setDepartmentId(department);
 				sections.add(sect);

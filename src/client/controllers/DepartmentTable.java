@@ -1,251 +1,271 @@
-// /*
-//  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
-//  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
-//  */
-// package client.controllers;
-// /**
-//  *
-//  * @author holy
-//  */
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
+package client.controllers;
+
+/**
+ *
+ * @author holy
+ */
+import javax.swing.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumnModel;
+import javax.swing.table.TableModel;
+
+import client.utils.RMIConnectio;
+import java.awt.event.*;
+import java.rmi.RemoteException;
+import java.rmi.registry.Registry;
+import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.awt.Color;
+import java.awt.Container;
+import java.awt.Font;
+
+import shared.classes.*;
+import shared.remoteInterface.*;
+
+import java.io.*;
+import java.util.ArrayList;
+public class DepartmentTable  implements ActionListener{
+
+    //1.Display Section
+    private JPanel displaySection;
+    private JTable sectionTable;
+    private DefaultTableModel modelSection;
+    private ListSelectionModel secModel;
+    private TableModel tableModelSection;
+    private ArrayList<Section>sections;
+
+    //2.Display Course
+    private JPanel displayCourse;
+    private JTable courseTable;
+    private DefaultTableModel modelCourse;
+    private ListSelectionModel couModel;
+    private TableModel tableModelCourse;
+    private ArrayList<Course>courses;
+
+    //3.Dispaly Teacher
+    private Registry registry;
+    private departmentInterface departmentStub;
+    private sectionInterface sectionStub;
+    private courseInterface courseStub;
+    private teacherInterface teacherStub;
+    private studentInterface studentStub;
+    //4.Side bar
+    private JPanel sidePanel;
+    private JButton sectionBtn;
+    private JButton courseBtn;
+    private JButton teacherBtn;
 
 
-// import java.util.*;
-// import java.awt.*;
-// import java.awt.event.*;
-// import javax.swing.*;
-
-// import java.rmi.registry.LocateRegistry;
-// import java.rmi.registry.Registry;
-
-// public class DepartmentTable extends JFrame{
-   
-//     private JLabel EmployeeIdLbl;
-//     private JLabel fnameLbl;
-//     private JLabel lnameLbl;
-//     private JLabel emailLbl;
-//     private JLabel phoneLbl;
-//     private JLabel salaryLbl;
-//     private JLabel hireDateLbl;
-//     private JLabel departmentLbl;
-    
-//     private JButton addBtn;
-//     private JButton finishBtn;
-//     private JComboBox sortBox;
-//     private JComboBox searchBox;
-//     private JLabel sortJLabel;
-//     private JLabel searchLbl;
-//     private JTable table;
-//     private JLabel searchValueLbl;
-//     private JTextField searchValueTxt;
-
-//     private JLabel  minSalaryLbl;
-//     private JLabel  maxSalaryLbl;
-//     private JTextField minSalaryTxt;
-//     private JTextField maxSalaryTxt;
-    
-//     public DepartmentTable(){
-        
-//         setSize(1000,1000);
-//         setLayout(null);
-//         setTitle("Display Employee");
-//         EmployeeIdLbl = new JLabel("EmpId");
-//         fnameLbl = new JLabel("First Name");
-//         lnameLbl = new JLabel("Last Name");
-//         emailLbl = new JLabel("Email");
-//         phoneLbl = new JLabel("Phone No");
-//         salaryLbl = new JLabel("Salary");
-//         hireDateLbl = new JLabel("Hire Date");
-//         departmentLbl = new JLabel("Department");
-
-       
-//         addBtn = new JButton("Show");
-//         finishBtn = new JButton("Back");
-//         finishBtn.addActionListener(this);
-//         sortJLabel = new JLabel("Sort By");
-//         searchLbl = new JLabel("Search By");
-//         searchValueLbl = new JLabel("Value");
-//         minSalaryLbl = new JLabel("Min Salary");
-//         maxSalaryLbl = new JLabel("Max Salary");
-//         minSalaryTxt = new JTextField();
-//         maxSalaryTxt = new JTextField();
-
-        
-
-//         String items[] = {"EmpID","First Name","Last Name","Email","Phone","Salary","Department","Hire Date"};
-//         String values[] = {"EmpID","First Name","Last Name","Email","Phone","Department"};
-//         sortBox = new JComboBox(items);
-//         searchBox = new JComboBox(values);
-//         searchValueTxt = new JTextField();
-        
-
-       
-//         // message = new JLabel();
-    
-       
-//         // finishBtn.addActionListener(this);
-    
-//         addBtn.setBounds(10, 250, 100, 20);
-//         searchLbl.setBounds(170, 250, 60, 20);
-//         searchBox.setBounds(235, 250, 100, 20);
-//         searchValueLbl.setBounds(170, 275, 60, 20);
-//         searchValueTxt.setBounds(235, 275, 100, 20);
-//         sortJLabel.setBounds(360, 250, 60, 20);
-//         sortBox.setBounds(425, 250, 100, 20);
-
-//         minSalaryLbl.setBounds(550, 250, 100, 20);
-//         minSalaryTxt.setBounds(550, 275, 100, 20);
-//         maxSalaryLbl.setBounds(670, 250, 100, 20);
-//         maxSalaryTxt.setBounds(670, 275, 100, 20);
-
-//         finishBtn.setBounds(800, 250, 100, 20);
-        
-
-
-
-//         EmployeeIdLbl.setBounds(10, 10, 100, 20);
-//         fnameLbl.setBounds(115, 10, 100, 20);
-//         lnameLbl.setBounds(220, 10, 100, 20);
-//         emailLbl.setBounds(325, 10, 100, 20);
-//         phoneLbl.setBounds(430, 10, 100, 20);
-//         salaryLbl.setBounds(535, 10, 100, 20);
-//         hireDateLbl.setBounds(640, 10, 100, 20);
-//         departmentLbl.setBounds(745, 10, 100, 20);
-       
-        
-    
-//         // addBtn.setBounds(20, 240, 90, 20);
-//         // finishBtn.setBounds(115, 240, 90, 20);
-
-       
-//         getContentPane().add(searchLbl);
-//         getContentPane().add(searchBox);
-//         getContentPane().add(searchValueLbl);
-//         getContentPane().add(searchValueTxt);
-
-//         getContentPane().add(minSalaryLbl);
-//         getContentPane().add(minSalaryTxt);
-//         getContentPane().add(maxSalaryLbl);
-//         getContentPane().add(maxSalaryTxt);
-
-//         getContentPane().add(sortJLabel);
-//         getContentPane().add(sortBox);
-//         getContentPane().add(addBtn);
-//         getContentPane().add(finishBtn);
-//         getContentPane().add(EmployeeIdLbl);
-//         getContentPane().add(fnameLbl);
-//         getContentPane().add(lnameLbl);
-//         getContentPane().add(emailLbl);
-//         getContentPane().add(phoneLbl);
-//         getContentPane().add(salaryLbl);
-//         getContentPane().add(hireDateLbl);
-//         getContentPane().add(departmentLbl);
-//         setVisible(true);
-//         setBackground(Color.WHITE);
-//     }
-//     // public  void actionPerformed(ActionEvent ae){
-//     //    if(ae.getSource()==addBtn){
-//     //     try{  
+    AdminTable action;
+    public  DepartmentTable(){
+        //create connection
+        try {
+            RMIConnectio connection  = new RMIConnectio();
+            this.registry = connection.getRegistry();
+            this.departmentStub = (departmentInterface) this.registry.lookup("department");
+            this.sectionStub = (sectionInterface) this.registry.lookup("section");
+            this.courseStub = (courseInterface) this.registry.lookup("course");
+            this.teacherStub = (teacherInterface) this.registry.lookup("teacher");
+            this.studentStub = (studentInterface) this.registry.lookup("student");
             
+        } catch (RemoteException e) {
+            System.out.println(e);
+        }catch (Exception ea){
+            System.out.println(ea);
+        }
+       
+    }
+    public  void actionPerformed(ActionEvent ae){
+         if(ae.getSource() == sectionBtn){
+           // Border br = BorderFactory.createLineBorder(Color.black);
+            // action.getAddStudentPanel().setVisible(false);
+            // action.getAddSectionPanel().setVisible(false);
+            // action.getAddCoursePanel().setVisible(false);
+            // Container con = panel.getParent();
+            // con.removeAll();
+            // JPanel pan = action.getAddDepartmentPanel();
+            // pan.setVisible(false);
+            // con.add(pan);
+            // con.add(panel);
+            // pan.setVisible(true);
+
+         }
+         else if(ae.getSource() == courseBtn){
+            // Container con = panel.getParent();
+            // con.removeAll();
+            // JPanel pan = action.getAddSectionPanel();
+            // pan.setVisible(false);
+            // con.add(pan);
+            // con.add(panel);
+            // pan.setVisible(true);
+        }
+        else if(ae.getSource() == teacherBtn){
            
-//     //         String query = "select * from employee";
-//     //         if(searchBox.getSelectedIndex()<6&&searchBox.getSelectedIndex()>0&&!searchValueTxt.getText().isEmpty()){
-//     //             if(searchBox.getSelectedIndex()==1)
-//     //                 query = query+" where first_name like '%"+searchValueTxt.getText()+"%'";
-//     //             else if(searchBox.getSelectedIndex()==2)
-//     //             query = query+" where last_name like '%"+searchValueTxt.getText()+"%'";
-//     //             else if(searchBox.getSelectedIndex()==3)
-//     //             query = query+" where email like '%"+searchValueTxt.getText()+"%'";
-//     //             else if(searchBox.getSelectedIndex()==4)
-//     //             query = query+" where phoneNo like '%"+searchValueTxt.getText()+"%'";
-//     //             else if(searchBox.getSelectedIndex()==5)
-//     //             query = query+" where  department like '%"+searchValueTxt.getText()+"%'";
-//     //                getContentPane().remove(table);  
-//     //         }
+            // Container con = panel.getParent();
+            // con.removeAll();
+            // JPanel pan = action.getAddCoursePanel();
+            // pan.setVisible(false);
+            // con.add(pan);
+            // con.add(panel);
+            // pan.setVisible(true);
+        }
     
-//     //         if(!minSalaryTxt.getText().isEmpty()&&!maxSalaryTxt.getText().isEmpty()){
-//     //             if(searchBox.getSelectedIndex()<6&&searchBox.getSelectedIndex()>0&&searchValueTxt.getText()!=null){
-//     //                 query = query + " and salary between "+ Double.parseDouble(minSalaryTxt.getText())+" and " +Double.parseDouble(maxSalaryTxt.getText());
-//     //             }
-//     //             else
-//     //                 query = query + " where salary between "+ Double.parseDouble(minSalaryTxt.getText())+" and " +Double.parseDouble(maxSalaryTxt.getText());
-//     //             getContentPane().remove(table);
-//     //         }
-//     //         else if(!minSalaryTxt.getText().isEmpty()){
-//     //             if(searchBox.getSelectedIndex()<6&&searchBox.getSelectedIndex()>0&&searchValueTxt.getText()!=null){
-//     //                 query = query + " and salary >="+ Double.parseDouble(minSalaryTxt.getText());
-//     //             }
-//     //             else
-//     //                 query = query + " and salary >="+ Double.parseDouble(minSalaryTxt.getText());
-//     //             getContentPane().remove(table);
-//     //         }
-//     //         else if(!maxSalaryTxt.getText().isEmpty()){
-//     //             if(searchBox.getSelectedIndex()<6&&searchBox.getSelectedIndex()>0&&searchValueTxt.getText()!=null){
-//     //                 query = query + " and salary <="+ Double.parseDouble(maxSalaryTxt.getText());
-//     //             }
-//     //             else
-//     //                 query = query + " and salary <="+ Double.parseDouble(maxSalaryTxt.getText());
-//     //             getContentPane().remove(table);
-//     //         }
+    }
+    public JPanel getSidePanel(){
+        sidePanel = new JPanel();
+        sidePanel.setLayout(null);
+        sidePanel.setBounds(0, 50, 200, 1200);
+        sidePanel.setBackground(Color.yellow);
 
-//     //         if(sortBox.getSelectedIndex()<6&&sortBox.getSelectedIndex()>0){
-//     //             if(sortBox.getSelectedIndex()==1)
-//     //                 query = query+" order by first_name";
-//     //             else if(sortBox.getSelectedIndex()==2)
-//     //                 query = query+" order by last_name";
-//     //             else if(sortBox.getSelectedIndex()==3)
-//     //                 query = query+" order by email";
-//     //             else if(sortBox.getSelectedIndex()==4)
-//     //                 query = query+" order by phoneNo";
-//     //             else if(sortBox.getSelectedIndex()==5)
-//     //                 query = query+" order by salary";
-//     //             else if(sortBox.getSelectedIndex()==6)
-//     //                 query = query+" order by phoneNo";
-//     //             else if(sortBox.getSelectedIndex()==7)
-//     //                 query = query+" order by hire_date";
-//     //             System.out.println(sortBox.getSelectedItem());
-//     //             getContentPane().remove(table);
-//     //         }
+        sectionBtn = new JButton("Sections");
+        courseBtn = new JButton("Courses");
+        teacherBtn = new JButton("Teachers");
 
-            
-            
-
-//     //         String[][] data = new String[10][8];
-//     //         String[] headers = {"EmpId","First Name","Last Name","Email","Phone No","Salary","Hire Date","Department"};
-//     //        int k=0;
-//     //         for( int i = 0;i<employees.size();i++){
-//     //             data[i][0] = employees.get(i).empId+"";
-//     //             data[i][1] = employees.get(i).frist_name;
-//     //             data[i][2] = employees.get(i).last_name;
-//     //             data[i][3] = employees.get(i).email;
-//     //             data[i][4] = employees.get(i).phoneNo;
-//     //             data[i][5] = employees.get(i).salary+"";
-//     //             data[i][6] = employees.get(i).hire_date;
-//     //             data[i][7] = employees.get(i).department;
-//     //             System.out.println(i);
-//     //             System.out.println(data[i][1]);
-//     //             k++;
-//     //         }   
-//     //         table = new JTable(data,headers);
-//     //         table.setBounds(10, 30, 835, k*19);
-//     //         table.setBackground(Color.white);
-//     //         table.setForeground(Color.blue);
-//     //         getContentPane().add(table);
-            
-//     //     }
-//     //     catch(Exception e){  
-//     //         //message.setText(e.getMessage());
-//     //         System.out.println(e);
-//     //     }   
-      
-//     //   }
-//     //   if(ae.getSource() == finishBtn){
-//     //       new runClient();
-//     //     dispose();
-//     // }
-//     // }
+        sectionBtn.setBounds(20, 100, 120, 30);
+        courseBtn.setBounds(20, 140, 120, 30);
+        teacherBtn.setBounds(20, 190, 120, 30);
     
-//      public static void main(String[] args) {
-//         DepartmentTable eml = new DepartmentTable();
-//     }
+        sectionBtn.addActionListener(this);
+        courseBtn.addActionListener(this);
+        teacherBtn.addActionListener(this);
+
+        sidePanel.add(sectionBtn);
+        sidePanel.add(courseBtn);
+        sidePanel.add(teacherBtn);
+          
+        return this.sidePanel;
+    }
+    // public JPanel getHeader(){
+    //     return this.header;
+    // }
+    public JPanel getDisplaySection(){
      
-// }
+        displaySection = new JPanel();
+        displaySection.setLayout(null);
+        displaySection.setSize(500, 500);
+        displaySection.setBounds(400, 70, 500, 500);
+
+        try {
+            String query = "select * from section ";
+            ArrayList<Section> sections = sectionStub.getSection(query);
+            //String[][] data = new String[sections.size()][2];
+            String[] headers = {"Section Id","Section Name"};
+            modelSection = new DefaultTableModel(headers,0);
+            sectionTable = new JTable(modelSection);
+           
+            for(Section section: sections){
+                modelSection.addRow(new Object[]{
+                    section.getSectionId(),
+                    section.getSectionName()
+                });
+            }
+
+            Color color = new Color(107,106,104);
+            sectionTable.setBounds(10, 20, 300, 300);
+            sectionTable.setBackground(Color.white);
+            sectionTable.setForeground(color);
+            sectionTable.setFont(new Font("Serif",Font.BOLD,20));
+            sectionTable.setRowHeight(25);
+            sectionTable.setAutoCreateRowSorter(true);
+            TableColumnModel columnModel = sectionTable.getColumnModel();
+            JScrollPane js = new JScrollPane(sectionTable);
+             
+            displaySection.add(sectionTable);
+            secModel = sectionTable.getSelectionModel();
+
+            secModel.addListSelectionListener(new ListSelectionListener() {
+                @Override
+                public void valueChanged(ListSelectionEvent e){
+                    if(!secModel.isSelectionEmpty()){
+                        int row = sectionTable.getSelectedRow();
+                        tableModelSection = sectionTable.getModel();
+                        String selectedSection = (String)tableModelSection.getValueAt(row, 0);  
+                        System.out.println(selectedSection);
+                    }
+                    
+                    System.out.println();
+                }
+            });
+        } catch (Exception e) {
+            //TODO: handle exception
+        }
+        System.out.println("hello world");
+        return this.displaySection; 
+    }
+    public JPanel getDisplayCourse(){
+     
+        displayCourse = new JPanel();
+        displayCourse.setLayout(null);
+        displayCourse.setSize(500, 500);
+        displayCourse.setBounds(400, 70, 500, 500);
+
+        try {
+            String query = "select * from course ";
+            ArrayList<Course> courses = courseStub.getCourse(query);
+            //String[][] data = new String[courses.size()][2];
+            String[] headers = {"Course Id","Course Name"};
+            modelCourse = new DefaultTableModel(headers,0);
+            courseTable = new JTable(modelSection);
+           
+            for(Course course: courses){
+                modelSection.addRow(new Object[]{
+                    course.getCourseId(),
+                    course.getCourseName()
+                });
+            }
+
+            Color color = new Color(107,106,104);
+            courseTable.setBounds(10, 20, 300, 300);
+            courseTable.setBackground(Color.white);
+            courseTable.setForeground(color);
+            courseTable.setFont(new Font("Serif",Font.BOLD,20));
+            courseTable.setRowHeight(25);
+            courseTable.setAutoCreateRowSorter(true);
+            TableColumnModel columnModel = courseTable.getColumnModel();
+            JScrollPane js = new JScrollPane(courseTable);
+             
+            displayCourse.add(courseTable);
+            couModel = courseTable.getSelectionModel();
+
+            couModel.addListSelectionListener(new ListSelectionListener() {
+                @Override
+                public void valueChanged(ListSelectionEvent e){
+                    if(!couModel.isSelectionEmpty()){
+                        int row = courseTable.getSelectedRow();
+                        tableModelCourse = courseTable.getModel();
+                        String selectedCourse = (String)tableModelCourse.getValueAt(row, 0);  
+                        System.out.println(selectedCourse);
+                    }
+            
+                }
+            });
+        } catch (Exception e) {
+            //TODO: handle exception
+        }
+        System.out.println("hello worlddddddd");
+        return this.displayCourse; 
+    }
+
+    public static void main(String[] args) {
+        
+        JFrame frame = new JFrame();
+        frame.setLayout(null);
+        frame.setSize(1200, 1200);
+        frame.setTitle("Check Page");
+
+        DepartmentTable table = new DepartmentTable();
+        frame.add( table.getSidePanel());
+        frame.add(table.getDisplayCourse());
+        frame.setVisible(true);
+    
+    }
+}

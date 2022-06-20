@@ -10,11 +10,18 @@ import java.awt.event.*;
 import java.rmi.RemoteException;
 import java.rmi.registry.Registry;
 import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
-public class AdminAction  implements ActionListener{
+public class AdminTable  implements ActionListener{
     
     private Registry registry;
     private departmentInterface departmentStub;
+    private sectionInterface sectionStub;
+    private courseInterface courseStub;
+    private teacherInterface teacherStub;
+    private studentInterface studentStub;
+
 
     private JPanel addDepartmentPanel;
     private JPanel addSectionPanel;
@@ -88,11 +95,16 @@ public class AdminAction  implements ActionListener{
     private JButton addStudentBtn;
     private JButton studentFinish;
     private JLabel studentHeader;
-    AdminAction(){
+    AdminTable(){
         try {
             RMIConnectio connection  = new RMIConnectio();
             this.registry = connection.getRegistry();
             this.departmentStub = (departmentInterface) this.registry.lookup("department");
+            this.sectionStub = (sectionInterface) this.registry.lookup("section");
+            this.courseStub = (courseInterface) this.registry.lookup("course");
+            this.teacherStub = (teacherInterface) this.registry.lookup("teacher");
+            this.studentStub = (studentInterface) this.registry.lookup("student");
+            
            
         } catch (RemoteException e) {
             System.out.println(e);
@@ -100,14 +112,41 @@ public class AdminAction  implements ActionListener{
             System.out.println(ea);
         }
     }
+      
+    public void departmentData(JComboBox box){
+        try {
+            ArrayList<Department>departments;
+            departments = departmentStub.getDepartment("select * from department");
+            for(Department department: departments){
+                box.addItem(department.getDepartmentName());
+            }
+           
+        } catch (RemoteException e) {
+            System.out.println(e);
+        }catch (Exception ea){
+            System.out.println(ea);
+        }
+    }
+    public String getDepartmentId(String departmentName){
+        String id = "";
+        try {
+            String query = "select * from department where dep_name = "+"'"+departmentName+"'";
+            ArrayList<Department> deps = departmentStub.getDepartment(query);
+            id = deps.get(0).getDepartmentId();
+
+        } catch (RemoteException e) {
+           System.out.println(e);
+            e.printStackTrace();
+        }
+        return id;
+    }
 
     public void addDepartment(){
         if(depIdTxt.getText().isEmpty()){   
             JOptionPane.showMessageDialog(addDepartmentPanel.getParent(),"Department Id is required");
             return;
         }
-        if(depNameTxt.getText().isEmpty()){
-            
+        if(depNameTxt.getText().isEmpty()){           
             JOptionPane.showMessageDialog(addDepartmentPanel.getParent(),"Department Name is required");
             return;
         }
@@ -125,32 +164,104 @@ public class AdminAction  implements ActionListener{
 
     }
     public void addSection(){
-        System.out.println("Section is added");
+        if(sectionIdTxt.getText().isEmpty()){   
+            JOptionPane.showMessageDialog(addSectionPanel.getParent(),"Section Id is required");
+            return;
+        }
+        if(sectionNameTxt.getText().isEmpty()){           
+            JOptionPane.showMessageDialog(addSectionPanel.getParent(),"Section Name is required");
+            return;
+        }
+        String id = sectionIdTxt.getText();
+        String name = sectionNameTxt.getText();
+        String sectionDepId = getDepartmentId((String) departmentList.getSelectedItem());
+
+        Section section = new Section(id,name);
+        section.setDepartmentId(sectionDepId);
+        try {
+            if(sectionStub.addSection(section)>0){
+                JOptionPane.showMessageDialog(addSectionPanel.getParent(),"Section added Successfully");
+            }
+        } catch (RemoteException e) {
+            JOptionPane.showMessageDialog(addSectionPanel.getParent(),"Some thing wrong");
+            // e.printStackTrace();
+        }
+        
     }
     public void addCourse(){
-        System.out.println("Course is added");
+        if(courseIdTxt.getText().isEmpty()){   
+            JOptionPane.showMessageDialog(addCoursePanel.getParent(),"Course Id is required");
+            return;
+        }
+        if(courseNameTxt.getText().isEmpty()){           
+            JOptionPane.showMessageDialog(addCoursePanel.getParent(),"Course Name is required");
+            return;
+        }
+        Pattern pattern = Pattern.compile("/\\d+");
+        Matcher matcher = pattern.matcher(creditHourTxt.getText());
+        boolean matchFound = matcher.find();
+        // if(matchFound){    
+        //     System.out.println(Integer.parseInt(creditHourTxt.getText()));  
+        //     if(Integer.parseInt(creditHourTxt.getText())<1||Integer.parseInt(creditHourTxt.getText())>10){
+        //         JOptionPane.showMessageDialog(addCoursePanel.getParent(),"Creadit hour must lessthan 10 and gretaer than 0");
+        //         return;
+        //     }       
+        // }
+        // else{
+        //     JOptionPane.showMessageDialog(addCoursePanel.getParent(),"Creadit hour invalid");
+        //     return;
+        // }
+      
+        String id = courseIdTxt.getText();
+        String name = courseNameTxt.getText();
+        Integer creditHour = Integer.parseInt(creditHourTxt.getText());
+
+        String courseDepId = getDepartmentId((String) List.getSelectedItem());
+
+        Course course = new Course(id, name, creditHour);
+        course.setDepartmentId(courseDepId);
+        try {
+            if(courseStub.addCourse(course)>0){
+                JOptionPane.showMessageDialog(addCoursePanel.getParent(),"Course added Successfully");
+            }
+        } catch (RemoteException e) {
+            JOptionPane.showMessageDialog(addCoursePanel.getParent(),"Some thing wrong");
+            // e.printStackTrace();
+        }
+
     }
     public void addTeacher(){
+        if(teacherSectionTxt.getText().isEmpty()||teacherCourseTxt.getText().isEmpty()||teacherIdTxt.getText().isEmpty()||
+        teacherFirstNameTxt.getText().isEmpty()||teacherLastNameTxt.getText().isEmpty()||teacherEmailTxt.getText().isEmpty())
+        {   
+            JOptionPane.showMessageDialog(addTeacherPanel.getParent(),"Please fill all input");
+            return;
+        }
+        String id = teacherIdTxt.getText();
+        String firstName = teacherFirstNameTxt.getText();
+        String lastName = teacherLastNameTxt.getText();
+        String email = teacherEmailTxt.getText();
+        
+        Teacher teacher = new Teacher(id, firstName, lastName, email);
+        teacher.setSectionId(teacherSectionTxt.getText());
+        teacher.setCourseId(teacherCourseTxt.getText());
+
+        //String teacherDepId = getDepartmentId((String) teacherDepartment.getSelectedItem());
+
+        try {
+            if(teacherStub.addTeacher(teacher)>0){
+                JOptionPane.showMessageDialog(addTeacherPanel.getParent(),"Teacher added Successfully");
+            }
+        } catch (RemoteException e) {
+            JOptionPane.showMessageDialog(addTeacherPanel.getParent(),"Some thing wrong");
+            // e.printStackTrace();
+        }
         System.out.println("Teacher is added");
     }
     public void addStudent(){
         System.out.println("Student is added");
     }
-    
-    public void departmentData(JComboBox box){
-        try {
-            ArrayList<Department>departments;
-            departments = departmentStub.getDepartment("select * from department");
-            for(Department department: departments){
-                box.addItem(department.getDepartmentName());
-            }
-           
-        } catch (RemoteException e) {
-            System.out.println(e);
-        }catch (Exception ea){
-            System.out.println(ea);
-        }
-    }
+  
     public JPanel getAddDepartmentPanel(){
         addDepartmentPanel = new JPanel();
         addDepartmentPanel.setLayout(null);
@@ -425,10 +536,16 @@ public class AdminAction  implements ActionListener{
         }
         else if(e.getSource() == departmentFinish||e.getSource() == sectionFinish||
         e.getSource() == courseFinish||e.getSource() == teacherFinish||e.getSource() == studentFinish){
-            addDepartmentPanel.setVisible(false);
-            addSectionPanel.setVisible(false);
-            addCoursePanel.setVisible(false);
-            addStudentPanel.setVisible(false);
+            if(addDepartmentPanel != null)
+                addDepartmentPanel.setVisible(false);
+            if(addSectionPanel != null)
+                addSectionPanel.setVisible(false);
+            if(addCoursePanel != null)
+                addCoursePanel.setVisible(false);
+            if(addTeacherPanel != null)
+                addTeacherPanel.setVisible(false);
+            if(addStudentPanel != null)
+                 addStudentPanel.setVisible(false);
         }
     }
 }
